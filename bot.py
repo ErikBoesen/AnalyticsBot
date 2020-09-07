@@ -46,7 +46,7 @@ def reply(message, group_id):
 
 def process_message(message):
     responses = []
-    if message.sender_type == SenderType.USER:
+    if message["sender_type"] == "user":
         if message["text"].startswith(PREFIX):
             instructions = message["text"][len(PREFIX):].strip().split(None, 1)
             command = instructions.pop(0).lower()
@@ -127,4 +127,7 @@ def show_analytics(group_id):
 # Local testing
 if __name__ == "__main__":
     while True:
-        print(process_message(Message(text=input("> "))))
+        print(process_message({
+            "text": input("> "),
+            "sender_type": "user"
+        }))
