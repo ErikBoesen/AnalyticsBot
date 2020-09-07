@@ -96,22 +96,7 @@ def send(message, group_id):
         response = requests.post("https://api.groupme.com/v3/bots/post", data=data)
 
 
-# Core routing
-@app.route("/")
-@cache.cached(timeout=CACHE_TIMEOUT)
-def home():
-    return render_template("index.html", static_commands=static_commands.keys(), commands=[(key, commands[key].DESCRIPTION) for key in commands])
-
-
-# Module interfaces
-@app.route("/memes")
-@cache.cached(timeout=CACHE_TIMEOUT)
-def memes():
-    return render_template("memes.html",
-                           memes=zip(commands["meme"].templates.keys(),
-                                     [len(commands["meme"].templates[template]) - 1 for template in commands["meme"].templates]))
-
-
+# Routing
 @app.route("/analytics/<group_id>")
 def show_analytics(group_id):
     # TODO: clear up users/leaderboards naming
