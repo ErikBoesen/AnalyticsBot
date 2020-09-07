@@ -1,6 +1,5 @@
 # Flask
 from flask import Flask, request, render_template, redirect
-from flask_sqlalchemy import SQLAlchemy
 
 # Other
 import mebots
@@ -17,7 +16,6 @@ from analytics import Group, groups
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
 bot = mebots.Bot("analyticsbot", os.environ.get("BOT_TOKEN"))
 
 MAX_MESSAGE_LENGTH = 1000
