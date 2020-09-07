@@ -48,8 +48,8 @@ def process_message(message):
             instructions = message["text"][len(PREFIX):].strip().split(None, 1)
             query = instructions[0] if len(instructions) > 0 else ""
             group_id = message["group_id"]
-            if group_id not in self.groups:
-                self.groups[group_id] = Group(group_id)
+            if group_id not in groups:
+                groups[group_id] = Group(group_id)
                 return f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!"
             if not command:
                 return f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}."
@@ -58,7 +58,7 @@ def process_message(message):
                     length = int(parameters.pop(0))
                 except Exception:
                     length = 10
-                leaders = self.groups[group_id].leaderboard[:length]
+                leaders = groups[group_id].leaderboard[:length]
                 for place, user in enumerate(leaders):
                     output += str(place + 1) + ". " + user["Name"] + " / Messages Sent: %d" % user["Messages"]
                     output += " / Likes Given: %d" % user["Likes"]
