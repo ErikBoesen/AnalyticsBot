@@ -102,7 +102,7 @@ class Group:
         # Iterate through users and calculate averages
         for user_id in self.users:
             if self.users[user_id]["Messages"] > 0:
-                self.users[user_id]["Likes Received Per Message"] = (self.users[user_id]["Likes Received"] / self.users[user_id]["Messages"])
+                self.users[user_id]["Likes Received Per Message"] = round(self.users[user_id]["Likes Received"] / self.users[user_id]["Messages"], 3)
 
     def build_leaderboard(self):
         """
