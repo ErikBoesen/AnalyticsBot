@@ -5,7 +5,7 @@
 {% else %}
 <table id="analytics">
     <thead>
-        {% for key, value in users[0].items() %}
+        {% for key, value in users[users.keys()[0]].items() %}
         <th>{{ key }}</th>
         {% endfor %}
     </thead>
