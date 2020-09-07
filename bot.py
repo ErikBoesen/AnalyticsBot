@@ -81,4 +81,5 @@ def send(text, bot_id):
 # Routing
 @app.route("/analytics/<group_id>")
 def show_analytics(group_id):
-    return render_template("analytics.html", users=groups[group_id].leaderboard)
+    return render_template("analytics.html",
+                           users=groups[group_id].leaderboard if group_id in groups else None)
