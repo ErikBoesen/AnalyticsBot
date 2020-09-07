@@ -47,6 +47,7 @@ def reply(message, group_id):
             if not command:
                 if group_id not in groups:
                     groups[group_id] = Group(group_id, instance.token)
+                    message_count = groups[group_id].message_count
                     responses.append(f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!")
                 else:
                     responses.append(f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}.")
@@ -66,7 +67,7 @@ def reply(message, group_id):
                 help_string = "--- Help ---"
                 help_string += "\nSay 'analytics' to begin analyzing the current group."
                 responses.append(help_string)
-            send(responses, bot_id)
+            send(responses, instance.id)
 
 
 def process_message(message):
