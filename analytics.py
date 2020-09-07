@@ -1,8 +1,4 @@
-from .base import Module
 import requests
-import re
-import sys
-from pprint import pprint
 import datetime
 import os
 
