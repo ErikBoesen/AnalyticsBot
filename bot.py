@@ -19,7 +19,7 @@ app.config.from_object(Config)
 bot = mebots.Bot("analyticsbot", os.environ.get("BOT_TOKEN"))
 
 MAX_MESSAGE_LENGTH = 1000
-PREFIX = "analyze"
+PREFIX = "analytics"
 
 
 # Webhook receipt and response
@@ -46,7 +46,6 @@ def process_message(message):
     if message["sender_type"] == "user":
         if message["text"].startswith(PREFIX):
             instructions = message["text"][len(PREFIX):].strip().split(None, 1)
-            command = instructions.pop(0).lower()
             query = instructions[0] if len(instructions) > 0 else ""
             group_id = message["group_id"]
             if group_id not in self.groups:
