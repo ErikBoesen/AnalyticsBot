@@ -13,6 +13,7 @@ import re
 
 # Bot components
 from config import Config
+from analytics import Group, groups
 
 
 app = Flask(__name__)
@@ -46,11 +47,30 @@ def reply(message, group_id):
 def process_message(message):
     responses = []
     if message.sender_type == SenderType.USER:
-        if message.text.startswith(PREFIX):
-            instructions = message.text[len(PREFIX):].strip().split(None, 1)
+        if message["text"].startswith(PREFIX):
+            instructions = message["text"][len(PREFIX):].strip().split(None, 1)
             command = instructions.pop(0).lower()
             query = instructions[0] if len(instructions) > 0 else ""
-            # If not, query appropriate module for a response
+            group_id = message["group_id"]
+            if group_id not in self.groups:
+                self.groups[group_id] = Group(group_id)
+                return f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!"
+            if not command:
+                return f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}."
+            elif command == "leaderboard":
+                try:
+                    length = int(parameters.pop(0))
+                except Exception:
+                    length = 10
+                leaders = self.groups[group_id].leaderboard[:length]
+                for place, user in enumerate(leaders):
+                    output += str(place + 1) + ". " + user["Name"] + " / Messages Sent: %d" % user["Messages"]
+                    output += " / Likes Given: %d" % user["Likes"]
+                    output += " / Likes Received: %d" % user["Likes Received"]
+                    output += "\n"
+            else:
+                return "Please state a valid command!"
+            return output
             if command == "help":
                 help_string = "--- Help ---"
                 help_string += "\nSay 'analytics' to begin analyzing the current group."

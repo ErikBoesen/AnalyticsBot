@@ -113,30 +113,4 @@ class Group:
         users.sort(key=lambda user: user["Messages"], reverse=True)
         self.leaderboard = users
 
-
-class Analytics(Module):
-    DESCRIPTION = "View statistics on user activity in the chat"
-    groups = {}
-
-    def response(self, query, message):
-        parameters = query.split(" ")
-        command = parameters.pop(0)
-        if message.group_id not in self.groups:
-            self.groups[message.group_id] = Group(message.group_id)
-            return f"{message_count} messages processed. View statistics at https://yalebot.herokuapp.com/analytics/{message.group_id}, or use `!analytics leaderboard` to view a list of the top users!"
-        if not command:
-            return f"View analytics for this group at https://yalebot.herokuapp.com/analytics/{message.group_id}."
-        elif command == "leaderboard":
-            try:
-                length = int(parameters.pop(0))
-            except Exception:
-                length = 10
-            leaders = self.groups[message.group_id].leaderboard[:length]
-            for place, user in enumerate(leaders):
-                output += str(place + 1) + ". " + user["Name"] + " / Messages Sent: %d" % user["Messages"]
-                output += " / Likes Given: %d" % user["Likes"]
-                output += " / Likes Received: %d" % user["Likes Received"]
-                output += "\n"
-        else:
-            return "Please state a valid command!"
-        return output
+groups = {}
