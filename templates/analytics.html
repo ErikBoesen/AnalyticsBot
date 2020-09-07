@@ -5,14 +5,14 @@
 {% else %}
 <table id="analytics">
     <thead>
-        {% for key, value in users[users.keys()[0]].items() %}
+        {% for key in users[0].keys() %}
         <th>{{ key }}</th>
         {% endfor %}
     </thead>
     <tbody>
         {% for user in users %}
         <tr>
-            {% for key, value in user.items() %}
+            {% for value in user.values() %}
             <td>{{ value }}</td>
             {% endfor %}
         </tr>
