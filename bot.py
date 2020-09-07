@@ -109,5 +109,5 @@ def send(message, bot_id):
 @app.route("/analytics/<group_id>")
 def show_analytics(group_id):
     # TODO: clear up users/leaderboards naming
-    users = commands["analytics"].leaderboards.get(group_id)
+    users = groups[group_id].leaderboards.get(group_id)
     return render_template("analytics.html", users=users)
