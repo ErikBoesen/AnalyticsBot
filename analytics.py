@@ -15,7 +15,7 @@ class Group:
         print("Analyzing " + str(self.message_count) + " messages.")
 
         # Make dictionary of members
-        self.populate_users(raw["members"], group_id)
+        self.populate_users(raw["members"])
 
         # Pull message data and parse through it
         self.analyze_group()
