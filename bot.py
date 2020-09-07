@@ -41,7 +41,7 @@ def receive():
 
 
 def reply(message, group_id):
-    send(process_message(Message(message)), group_id)
+    send(process_message(message), group_id)
 
 
 def process_message(message):
