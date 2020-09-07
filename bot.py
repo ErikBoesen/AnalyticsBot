@@ -1,7 +1,6 @@
 # Flask
 from flask import Flask, request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
-from flask_caching import Cache
 
 # Other
 import mebots
