@@ -54,6 +54,9 @@ table#analytics td {
     border: solid 1px #333;
     text-align: right;
 }
+table th, table td {
+    padding: 3px;
+}
 
 @media (min-width: 800px) {
     header, main, footer {
