@@ -40,17 +40,18 @@ def receive():
 def reply(message, group_id):
     if message["sender_type"] == "user":
         if message["text"].startswith(PREFIX):
-            responses = []
             command = message["text"][len(PREFIX):].strip().split(None, 1)
             # Reach out to MeBots to get instance data
             instance = bot.instance(group_id)
+            bot_id = instance.id
             if not command:
                 if group_id not in groups:
+                    send("Analyzing messages. This may take a while.", bot_id)
                     groups[group_id] = Group(group_id, instance.token)
                     message_count = groups[group_id].message_count
-                    responses.append(f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!")
+                    send(f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!", bot_id)
                 else:
-                    responses.append(f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}.")
+                    send(f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}.", bot_id)
             elif command == "leaderboard":
                 try:
                     length = int(parameters.pop(0))
@@ -62,16 +63,11 @@ def reply(message, group_id):
                     output += " / Likes Given: %d" % user["Likes"]
                     output += " / Likes Received: %d" % user["Likes Received"]
                     output += "\n"
-                responses.append(output)
+                send(output, bot_id)
             elif command == "help":
                 help_string = "--- Help ---"
                 help_string += "\nSay 'analytics' to begin analyzing the current group."
-                responses.append(help_string)
-            send(responses, instance.id)
-
-
-def process_message(message):
-    return responses
+                send(help_string, bot_id)
 
 
 def send(text, bot_id):
