@@ -34,7 +34,7 @@ class Group:
         message_id = 0
         message_number = 0
         last_percentage = 0
-        while message_number < message_count:
+        while message_number < self.message_count:
             params = {
                 # Get maximum number of messages at a time
                 "limit": 100,
@@ -77,7 +77,7 @@ class Group:
             except Exception:
                 # If history has been cleared
                 break
-            percentage = int(10 * message_number / message_count) * 10
+            percentage = int(10 * message_number / self.message_count) * 10
             if percentage > last_percentage:
                 last_percentage = percentage
                 print("%d%% done" % percentage)
