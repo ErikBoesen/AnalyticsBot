@@ -74,40 +74,17 @@ def process_message(message):
     return responses
 
 
-def send(message, bot_id):
-    # Recurse when sending multiple messages.
-    if isinstance(message, list):
-        for item in message:
-            send(item, bot_id)
-        return
+def send(text, bot_id):
     data = {
+        "text": text,
         "bot_id": bot_id,
     }
-    image = None
-    if isinstance(message, tuple):
-        message, image = message
-    # TODO: this is lazy
-    if message is None:
-        message = ""
-    if len(message) > MAX_MESSAGE_LENGTH:
-        # If text is too long for one message, split it up over several
-        for block in [message[i:i + MAX_MESSAGE_LENGTH] for i in range(0, len(message), MAX_MESSAGE_LENGTH)]:
-            send(block, group_id)
-            time.sleep(0.3)
-        data["text"] = ""
-    else:
-        data["text"] = message
-    if image is not None:
-        data["picture_url"] = image
-    # Prevent sending message if there's no content
-    # It would be rejected anyway
-    if data["text"] or data.get("picture_url"):
-        response = requests.post("https://api.groupme.com/v3/bots/post", data=data)
+    response = requests.post("https://api.groupme.com/v3/bots/post", data=data)
 
 
 # Routing
 @app.route("/analytics/<group_id>")
 def show_analytics(group_id):
     # TODO: clear up users/leaderboards naming
-    users = groups[group_id].leaderboards.get(group_id)
+    users = groups[group_id].users
     return render_template("analytics.html", users=users)
