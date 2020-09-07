@@ -10,8 +10,9 @@ class Group:
 
     def __init__(self, group_id, token):
         self.group_id = group_id
+        self.token = token
 
-        raw = requests.get(f"https://api.groupme.com/v3/groups/{self.group_id}?token={token}").json()["response"]
+        raw = requests.get(f"https://api.groupme.com/v3/groups/{self.group_id}?token={self.token}").json()["response"]
         # Display info to user before the analysis begins
         self.message_count = raw["messages"]["count"]
         print("Analyzing " + str(self.message_count) + " messages.")
@@ -43,7 +44,7 @@ class Group:
             }
             if message_id:
                 params["before_id"] = message_id
-            response = requests.get(f"https://api.groupme.com/v3/groups/{self.group_id}/messages?token={self.ACCESS_TOKEN}", params=params)
+            response = requests.get(f"https://api.groupme.com/v3/groups/{self.group_id}/messages?token={self.token}", params=params)
             messages = response.json()["response"]["messages"]
             for message in messages:
                 message_number += 1
