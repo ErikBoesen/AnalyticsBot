@@ -1,0 +1,5 @@
+Flask
+Flask-SQLAlchemy
+mebots
+psycopg2
+gunicorn
