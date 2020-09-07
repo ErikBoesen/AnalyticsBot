@@ -104,7 +104,7 @@ class Group:
             if self.users[user_id]["Messages"] > 0:
                 self.users[user_id]["Likes Received Per Message"] = (self.users[user_id]["Likes Received"] / self.users[user_id]["Messages"])
 
-    def build_leaderboard():
+    def build_leaderboard(self):
         """
         Make descending ordered list of users by number of messages sent.
         """
