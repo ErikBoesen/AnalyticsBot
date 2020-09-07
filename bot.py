@@ -38,21 +38,20 @@ def receive():
 
 
 def reply(message, group_id):
-    send(process_message(message), group_id)
-
-
-def process_message(message):
-    responses = []
     if message["sender_type"] == "user":
         if message["text"].startswith(PREFIX):
+            responses = []
             instructions = message["text"][len(PREFIX):].strip().split(None, 1)
             query = instructions[0] if len(instructions) > 0 else ""
             group_id = message["group_id"]
-            if group_id not in groups:
-                groups[group_id] = Group(group_id)
-                return f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!"
+            # Reach out to MeBots to get instance data
+            instance = bot.instance(group_id)
             if not command:
-                return f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}."
+                if group_id not in groups:
+                    groups[group_id] = Group(group_id, token)
+                    responses.append(f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!")
+                else:
+                    responses.append(f"View analytics for this group at https://analyticsbot.herokuapp.com/analytics/{group_id}.")
             elif command == "leaderboard":
                 try:
                     length = int(parameters.pop(0))
@@ -64,31 +63,26 @@ def process_message(message):
                     output += " / Likes Given: %d" % user["Likes"]
                     output += " / Likes Received: %d" % user["Likes Received"]
                     output += "\n"
-            else:
-                return "Please state a valid command!"
-            return output
-            if command == "help":
+                responses.append(output)
+            elif command == "help":
                 help_string = "--- Help ---"
                 help_string += "\nSay 'analytics' to begin analyzing the current group."
                 responses.append(help_string)
-            else:
-                pass
+            send(responses, bot_id)
+
+
+def process_message(message):
     return responses
 
 
-def send(message, group_id):
-    """
-    Reply in chat.
-    :param message: text of message to send. May be a tuple with further data, or a list of messages.
-    :param group_id: ID of group in which to send message.
-    """
+def send(message, bot_id):
     # Recurse when sending multiple messages.
     if isinstance(message, list):
         for item in message:
-            send(item, group_id)
+            send(item, bot_id)
         return
     data = {
-        "bot_id": bot.instance(group_id).id,
+        "bot_id": bot_id,
     }
     image = None
     if isinstance(message, tuple):
@@ -118,12 +112,3 @@ def show_analytics(group_id):
     # TODO: clear up users/leaderboards naming
     users = commands["analytics"].leaderboards.get(group_id)
     return render_template("analytics.html", users=users)
-
-
-# Local testing
-if __name__ == "__main__":
-    while True:
-        print(process_message({
-            "text": input("> "),
-            "sender_type": "user"
-        }))

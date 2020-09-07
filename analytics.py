@@ -8,8 +8,8 @@ class Group:
     leaderboard = {}
     frequency = {}
 
-    def __init__(self, group_id):
-        raw = requests.get(f"https://api.groupme.com/v3/groups/{group_id}?token={self.ACCESS_TOKEN}").json()["response"]
+    def __init__(self, group_id, token):
+        raw = requests.get(f"https://api.groupme.com/v3/groups/{group_id}?token={token}").json()["response"]
         # Display info to user before the analysis begins
         self.message_count = raw["messages"]["count"]
         print("Analyzing " + str(self.message_count) + " messages.")
