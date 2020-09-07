@@ -41,12 +41,11 @@ def reply(message, group_id):
     if message["sender_type"] == "user":
         if message["text"].startswith(PREFIX):
             responses = []
-            instructions = message["text"][len(PREFIX):].strip().split(None, 1)
-            query = instructions[0] if len(instructions) > 0 else ""
+            command = message["text"][len(PREFIX):].strip().split(None, 1)
             group_id = message["group_id"]
             # Reach out to MeBots to get instance data
             instance = bot.instance(group_id)
-            if not command:
+            if not instructions:
                 if group_id not in groups:
                     groups[group_id] = Group(group_id, token)
                     responses.append(f"{message_count} messages processed. View statistics at https://analyticsbot.herokuapp.com/analytics/{group_id}, or say `analytics leaderboard` to view a list of the top users!")
